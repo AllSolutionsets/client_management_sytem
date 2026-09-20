@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="fr" class="h-full bg-slate-100">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Odoo Apps - Dashboard Modules</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        odoo: {
+                            purple: '#714B67',
+                            darkPurple: '#593950',
+                            lightPurple: '#8f6383',
+                            accent: '#00A09D',
+                            accentHover: '#008784',
+                            bg: '#F8F9FA',
+                            cardBg: '#FFFFFF',
+                            text: '#212529',
+                            subtext: '#6C757D',
+                            border: '#E0E0E0',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom Odoo Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+        .odoo-shadow {
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.12);
+        }
+        .odoo-shadow-hover:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.12), 0 2px 4px rgba(0,0,0,0.08);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body class="h-full font-sans text-odoo-text bg-slate-100 flex flex-col antialiased">
+
+<!-- Odoo Top Navigation Bar -->
+<header class="bg-odoo-purple text-white shadow-md z-30 sticky top-0">
+    <div class="flex items-center justify-between px-4 h-12">
+        <!-- Left Side: App Switcher & Title -->
+        <div class="flex items-center space-x-3">
+            <button class="p-2 hover:bg-odoo-darkPurple rounded transition-colors text-white/80 hover:text-white" title="Menu Apps">
+                <i class="fa-solid font-bold fa-grip text-lg"></i>
+            </button>
+            <div class="flex items-center space-x-2">
+                <span class="font-bold tracking-wide text-lg text-white">odoo</span>
+                <span class="text-xs bg-odoo-accent text-white px-2 py-0.5 rounded-full font-medium">CRM Suite</span>
+            </div>
+            <div class="hidden md:flex items-center space-x-1 text-sm text-white/70 pl-4 border-l border-white/20">
+                <span class="font-medium text-white">Applications</span>
+            </div>
+        </div>
+
+        <!-- Right Side: Company Selector, Notifications, User -->
+        <div class="flex items-center space-x-2 md:space-x-4">
+            <!-- Company Selector -->
+            <div class="hidden sm:flex items-center bg-odoo-darkPurple px-2.5 py-1 rounded text-xs text-white/90 cursor-pointer hover:bg-black/20 transition">
+                <i class="fa-solid fa-building mr-2 text-odoo-accent"></i>
+                <span class="font-medium">Ma Société SARL</span>
+                <i class="fa-solid fa-chevron-down ml-2 text-xs text-white/60"></i>
+            </div>
+
+            <!-- Icons -->
+            <button class="p-1.5 hover:bg-odoo-darkPurple rounded-full text-white/80 hover:text-white relative" title="Activités">
+                <i class="fa-regular fa-clock text-sm"></i>
+            </button>
+            <button class="p-1.5 hover:bg-odoo-darkPurple rounded-full text-white/80 hover:text-white relative" title="Conversations">
+                <i class="fa-regular fa-comments text-sm"></i>
+                <span class="absolute top-1 right-1 w-2 h-2 bg-odoo-accent rounded-full"></span>
+            </button>
+
+            <!-- User Avatar & Dropdown -->
+            <div class="flex items-center space-x-2 pl-2 border-l border-white/20 cursor-pointer group">
+                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&auto=format&fit=crop&q=80"
+                     alt="Avatar Admin"
+                     class="w-7 h-7 rounded-full object-cover border border-white/40">
+                <span class="hidden md:inline-block text-xs font-medium text-white/90 group-hover:text-white">Admin Systèmes</span>
+                <i class="fa-solid fa-chevron-down text-xs text-white/60"></i>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Control Panel / Filter Bar -->
+<div class="bg-white border-b border-gray-200 px-4 py-3 shadow-sm sticky top-12 z-20">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-3">
+        <!-- Breadcrumb / Title -->
+        <div class="flex items-center space-x-3">
+            <h1 class="text-xl font-bold text-gray-800 tracking-tight flex items-center gap-2">
+                <i class="fa-solid fa-cubes text-odoo-purple"></i> Applications
+            </h1>
+            <span class="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-md font-semibold border border-gray-200" id="module-count">
+                    4 Modules disponibles
+                </span>
+        </div>
+
+        <!-- Search Bar and Quick Filters -->
+        <div class="flex flex-1 max-w-2xl items-center gap-2">
+            <div class="relative flex-1">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
+                    <i class="fa-solid fa-magnifying-glass text-sm"></i>
+                </div>
+                <input type="text" id="search-input"
+                       class="w-full pl-9 pr-8 py-1.5 text-sm bg-gray-50 border border-gray-300 rounded-md focus:bg-white focus:outline-none focus:ring-2 focus:ring-odoo-purple focus:border-transparent transition"
+                       placeholder="Rechercher un module (ex: CRM, Rapports, Paramètres...)...">
+                <button id="clear-search" class="hidden absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600">
+                    <i class="fa-solid fa-circle-xmark text-sm"></i>
+                </button>
+            </div>
+
+            <!-- Filter Chips -->
+            <div class="hidden sm:flex items-center gap-1">
+                <button class="filter-btn active-filter px-3 py-1.5 text-xs font-medium rounded-md border border-odoo-purple bg-odoo-purple text-white transition" data-filter="all">
+                    Tous
+                </button>
+                <button class="filter-btn px-3 py-1.5 text-xs font-medium rounded-md border border-gray-300 text-gray-600 bg-white hover:bg-gray-50 transition" data-filter="installed">
+                    Installés
+                </button>
+                <button class="filter-btn px-3 py-1.5 text-xs font-medium rounded-md border border-gray-300 text-gray-600 bg-white hover:bg-gray-50 transition" data-filter="config">
+                    À configurer
+                </button>
+            </div>
+        </div>
+
+        <!-- View Modes -->
+        <div class="hidden lg:flex items-center space-x-1 bg-gray-100 p-1 rounded-md border border-gray-200">
+            <button class="p-1.5 text-odoo-purple bg-white rounded shadow-sm" title="Vue Grille">
+                <i class="fa-solid fa-border-all text-xs"></i>
+            </button>
+            <button class="p-1.5 text-gray-500 hover:text-gray-700 rounded" title="Vue Liste">
+                <i class="fa-solid fa-list text-xs"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Main Content Grid -->
+<main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6">
+
+    <!-- Category Header -->
+    <div class="mb-4 flex items-center justify-between">
+        <h2 class="text-xs font-bold uppercase tracking-wider text-gray-500">
+            Gestion d'Entreprise & Suivi Clients
+        </h2>
+        <div class="text-xs text-gray-400">
+            Mise à jour v17.0
+        </div>
+    </div>
+
+    <!-- Cards Container -->
+    <div id="modules-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-5">
+
+        <!-- MODULE 1: Données de base -->
+        <div class="module-card bg-white rounded-lg border border-gray-200 odoo-shadow odoo-shadow-hover transition-all duration-200 flex flex-col justify-between overflow-hidden"
+             data-title="donnees de base master references configurations initiales"
+             data-status="installed">
+            <div class="p-5 flex items-start space-x-4">
+                <!-- App Icon -->
+                <div class="w-16 h-16 rounded-xl bg-gradient-to-br font-semibold from-amber-500 to-amber-700 flex-shrink-0 flex items-center justify-center text-white shadow-md">
+                    <i class="fa-solid fa-database text-3xl"></i>
+                </div>
+
+                <!-- Content -->
+                <div class="flex-1 min-w-0">
+                    <div class="flex items-center justify-between mb-1">
+                        <h3 class="text-base font-bold text-gray-900 truncate group-hover:text-odoo-purple">
+                            Données de base
+                        </h3>
+                        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full mr-1.5"></span>
+                                Installé
+                            </span>
+                    </div>
+                    <p class="text-xs text-gray-500 leading-relaxed mb-3 line-clamp-2">
+                        Gestion du référentiel central : base de données master, tables de références, articles, nomenclatures et configurations initiales.
+                    </p>
+
+                    <!-- Mini Tags -->
+                    <div class="flex flex-wrap gap-1.5">
+                        <span class="px-2 py-0.5 bg-gray-100 text-gray-600 rounded text-[10px] font-medium">Master Data</span>
+                        <span class="px-2 py-0.5 bg-gray-100 text-gray-600 rounded text-[10px] font-medium">Référentiel</span>
+                        <span class="px-2 py-0.5 bg-gray-100 text-gray-600 rounded text-[10px] font-medium">Catalogues</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Card -->
+            <div class="bg-gray-50 px-5 py-3 border-t border-gray-100 flex items-center justify-between">
+                    <span class="text-xs text-gray-500 flex items-center">
+                        <i class="fa-regular fa-folder-open mr-1.5 text-gray-400"></i> Module Système
+                    </span>
+                <button onclick="openModule('Données de base')" class="px-3 py-1.5 bg-odoo-purple hover:bg-odoo-darkPurple text-white text-xs font-semibold rounded shadow-sm transition-colors flex items-center gap-1.5">
+                    <i class="fa-solid fa-arrow-right-to-bracket text-[10px]"></i> Ouvrir
+                </button>
+            </div>
+        </div>
+
+        <!-- MODULE 2: Gestion des clients -->
+        <div class="module-card bg-white rounded-lg border border-gray-200 odoo-shadow odoo-shadow-hover transition-all duration-200 flex flex-col justify-between overflow-hidden"
+             data-title="gestion des clients contacts crm suivi des opportunites historique client pipeline ventes"
+             data-status="installed">
+            <div class="p-5 flex items-start space-x-4">
+                <!-- App Icon -->
+                <div class="w-16 h-16 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-600 flex-shrink-0 flex items-center justify-center text-white shadow-md">
+                    <i class="fa-solid fa-users-gear text-3xl"></i>
+                </div>
+
+                <!-- Content -->
+                <div class="flex-1 min-w-0">
+                    <div class="flex items-center justify-between mb-1">
+                        <h3 class="text-base font-bold text-gray-900 truncate">
+                            Gestion des clients (CRM)
+                        </h3>
+                        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full mr-1.5"></span>
+                                Installé
+                            </span>
+                    </div>
+                    <p class="text-xs text-gray-500 leading-relaxed mb-3 line-clamp-2">
+                        Suivi complet du cycle de vie client : carnet de contacts, CRM, gestion du pipeline d'opportunités commercial et historique.
+                    </p>
+
+                    <!-- Mini Tags -->
+                    <div class="flex flex-wrap gap-1.5">
+                        <span class="px-2 py-0.5 bg-gray-100 text-gray-600 rounded text-[10px] font-medium">Contacts</span>
+                        <span class="px-2 py-0.5 bg-gray-100 text-gray-600 rounded text-[10px] font-medium">Pipeline Commercial</span>
+                        <span class="px-2 py-0.5 bg-gray-100 text-gray-600 rounded text-[10px] font-medium">Historique</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Card -->
+            <div class="bg-gray-50 px-5 py-3 border-t border-gray-100 flex items-center justify-between">
+                    <span class="text-xs text-gray-500 flex items-center">
+                        <i class="fa-solid fa-chart-line mr-1.5 text-gray-400"></i> 142 Contacts actifs
+                    </span>
+                <button onclick="openModule('Gestion des clients')" class="px-3 py-1.5 bg-odoo-purple hover:bg-odoo-darkPurple text-white text-xs font-semibold rounded shadow-sm transition-colors flex items-center gap-1.5">
+                    <i class="fa-solid fa-arrow-right-to-bracket text-[10px]"></i> Lancer CRM
+                </button>
+            </div>
+        </div>
+
+        <!-- MODULE 3: Rapports -->
+        <div class="module-card bg-white rounded-lg border border-gray-200 odoo-shadow odoo-shadow-hover transition-all duration-200 flex flex-col justify-between overflow-hidden"
+             data-title="rapports analytiques kpis graphiques de vente exports statistiques tableaux de bord"
+             data-status="installed">
+            <div class="p-5 flex items-start space-x-4">
+                <!-- App Icon -->
+                <div class="w-16 h-16 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-700 flex-shrink-0 flex items-center justify-center text-white shadow-md">
+                    <i class="fa-solid fa-chart-pie text-3xl"></i>
+                </div>
+
+                <!-- Content -->
+                <div class="flex-1 min-w-0">
+                    <div class="flex items-center justify-between mb-1">
+                        <h3 class="text-base font-bold text-gray-900 truncate">
+                            Rapports & Business Intelligence
+                        </h3>
+                        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                                <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full mr-1.5"></span>
+                                Installé
+                            </span>
+                    </div>
+                    <p class="text-xs text-gray-500 leading-relaxed mb-3 line-clamp-2">
+                        Analytiques poussées, indicateurs clés de performance (KPIs), graphiques de vente interactifs et exports multi-formats.
+                    </p>
+
+                    <!-- Mini Tags -->
+                    <div class="flex flex-wrap gap-1.5">
+                        <span class="px-2 py-0.5 bg-gray-100 text-gray-600 rounded text-[10px] font-medium">Analytique</span>
+                        <span class="px-2 py-0.5 bg-gray-100 text-gray-600 rounded text-[10px] font-medium">KPIs</span>
+                        <span class="px-2 py-0.5 bg-gray-100 text-gray-600 rounded text-[10px] font-medium">Export Excel/PDF</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Card -->
+            <div class="bg-gray-50 px-5 py-3 border-t border-gray-100 flex items-center justify-between">
+                    <span class="text-xs text-gray-500 flex items-center">
+                        <i class="fa-regular fa-file-pdf mr-1.5 text-gray-400"></i> Dashboards temps réel
+                    </span>
+                <button onclick="openModule('Rapports')" class="px-3 py-1.5 bg-odoo-purple hover:bg-odoo-darkPurple text-white text-xs font-semibold rounded shadow-sm transition-colors flex items-center gap-1.5">
+                    <i class="fa-solid fa-arrow-right-to-bracket text-[10px]"></i> Consulter
+                </button>
+            </div>
+        </div>
+
+        <!-- MODULE 4: Paramétrages -->
+        <div class="module-card bg-white rounded-lg border border-gray-200 odoo-shadow odoo-shadow-hover transition-all duration-200 flex flex-col justify-between overflow-hidden"
+             data-title="parametramges configuration generale gestion des utilisateurs roles et permissions securite"
+             data-status="config">
+            <div class="p-5 flex items-start space-x-4">
+                <!-- App Icon -->
+                <div class="w-16 h-16 rounded-xl bg-gradient-to-br from-purple-600 to-indigo-800 flex-shrink-0 flex items-center justify-center text-white shadow-md">
+                    <i class="fa-solid fa-sliders text-3xl"></i>
+                </div>
+
+                <!-- Content -->
+                <div class="flex-1 min-w-0">
+                    <div class="flex items-center justify-between mb-1">
+                        <h3 class="text-base font-bold text-gray-900 truncate">
+                            Paramétrages
+                        </h3>
+                        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200">
+                                <i class="fa-solid fa-triangle-exclamation text-[10px] mr-1"></i>
+                                À configurer
+                            </span>
+                    </div>
+                    <p class="text-xs text-gray-500 leading-relaxed mb-3 line-clamp-2">
+                        Configuration générale de l'application, gestion des droits des utilisateurs, définition des rôles, groupes et permissions.
+                    </p>
+
+                    <!-- Mini Tags -->
+                    <div class="flex flex-wrap gap-1.5">
+                        <span class="px-2 py-0.5 bg-gray-100 text-gray-600 rounded text-[10px] font-medium">Utilisateurs</span>
+                        <span class="px-2 py-0.5 bg-gray-100 text-gray-600 rounded text-[10px] font-medium">Permissions</span>
+                        <span class="px-2 py-0.5 bg-gray-100 text-gray-600 rounded text-[10px] font-medium">Système</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Card -->
+            <div class="bg-gray-50 px-5 py-3 border-t border-gray-100 flex items-center justify-between">
+                    <span class="text-xs text-amber-600 font-medium flex items-center">
+                        <i class="fa-solid fa-circle-info mr-1.5"></i> Action requise (2 rôles)
+                    </span>
+                <button onclick="openModule('Paramétrages')" class="px-3 py-1.5 bg-odoo-accent hover:bg-odoo-accentHover text-white text-xs font-semibold rounded shadow-sm transition-colors flex items-center gap-1.5">
+                    <i class="fa-solid fa-gear text-[10px]"></i> Configurer
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Empty State for Search -->
+    <div id="no-results" class="hidden text-center py-16 bg-white rounded-lg border border-dashed border-gray-300 mt-2">
+        <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3 text-gray-400">
+            <i class="fa-solid fa-magnifying-glass text-2xl"></i>
+        </div>
+        <h3 class="text-sm font-semibold text-gray-800">Aucun module trouvé</h3>
+        <p class="text-xs text-gray-500 mt-1">Essayez de modifier vos termes de recherche ou vos filtres.</p>
+        <button id="reset-search-btn" class="mt-4 px-3 py-1.5 bg-gray-200 hover:bg-gray-300 text-gray-700 text-xs font-medium rounded transition">
+            Réinitialiser la recherche
+        </button>
+    </div>
+</main>
+
+<!-- Action Modal -->
+<div id="module-modal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center hidden opacity-0 transition-opacity duration-200">
+    <div class="bg-white rounded-xl shadow-2xl max-w-md w-full mx-4 overflow-hidden transform scale-95 transition-transform duration-200" id="modal-box">
+        <div class="bg-odoo-purple text-white px-5 py-4 flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+                <i class="fa-solid fa-circle-check text-odoo-accent text-lg"></i>
+                <h3 class="font-bold text-sm" id="modal-title">Lancement du Module</h3>
+            </div>
+            <button onclick="closeModal()" class="text-white/70 hover:text-white">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+        </div>
+        <div class="p-6 text-center">
+            <div class="w-12 h-12 bg-purple-50 text-odoo-purple rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fa-solid fa-rocket text-xl"></i>
+            </div>
+            <p class="text-sm text-gray-600 mb-1">Vous accédez actuellement au module :</p>
+            <p class="text-base font-bold text-gray-900 mb-4" id="modal-module-name">Nom du module</p>
+            <div class="bg-gray-50 p-3 rounded-lg border border-gray-200 text-xs text-gray-500 text-left mb-4">
+                <i class="fa-solid fa-info-circle text-odoo-purple mr-1"></i> Redirection vers la vue d'administration et de gestion...
+            </div>
+            <button onclick="closeModal()" class="w-full py-2 bg-odoo-purple hover:bg-odoo-darkPurple text-white text-xs font-semibold rounded shadow transition">
+                Continuer vers le module
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Interactivity & Search Logic -->
+<script>
+    const searchInput = document.getElementById('search-input');
+    const clearSearchBtn = document.getElementById('clear-search');
+    const moduleCards = document.querySelectorAll('.module-card');
+    const noResults = document.getElementById('no-results');
+    const countBadge = document.getElementById('module-count');
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const resetBtn = document.getElementById('reset-search-btn');
+
+    let currentFilter = 'all';
+
+    // Search and Filter Function
+    function filterModules() {
+        const query = searchInput.value.toLowerCase().trim();
+        let visibleCount = 0;
+
+        moduleCards.forEach(card => {
+            const titleData = card.getAttribute('data-title').toLowerCase();
+            const statusData = card.getAttribute('data-status');
+
+            const matchesSearch = titleData.includes(query);
+            const matchesFilter = (currentFilter === 'all') || (statusData === currentFilter);
+
+            if (matchesSearch && matchesFilter) {
+                card.classList.remove('hidden');
+                visibleCount++;
+            } else {
+                card.classList.add('hidden');
+            }
+        });
+
+        // Update Count Badge
+        countBadge.textContent = `${visibleCount} Module${visibleCount > 1 ? 's' : ''} disponible${visibleCount > 1 ? 's' : ''}`;
+
+        // Show/Hide Empty State
+        if (visibleCount === 0) {
+            noResults.classList.remove('hidden');
+        } else {
+            noResults.classList.add('hidden');
+        }
+
+        // Show/Hide Clear Input Button
+        if (query.length > 0) {
+            clearSearchBtn.classList.remove('hidden');
+        } else {
+            clearSearchBtn.classList.add('hidden');
+        }
+    }
+
+    // Event Listeners for Search
+    searchInput.addEventListener('input', filterModules);
+
+    clearSearchBtn.addEventListener('click', () => {
+        searchInput.value = '';
+        filterModules();
+        searchInput.focus();
+    });
+
+    resetBtn.addEventListener('click', () => {
+        searchInput.value = '';
+        currentFilter = 'all';
+        updateFilterButtons();
+        filterModules();
+    });
+
+    // Filter Buttons Logic
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            currentFilter = btn.getAttribute('data-filter');
+            updateFilterButtons();
+            filterModules();
+        });
+    });
+
+    function updateFilterButtons() {
+        filterBtns.forEach(btn => {
+            if (btn.getAttribute('data-filter') === currentFilter) {
+                btn.classList.add('bg-odoo-purple', 'text-white', 'border-odoo-purple');
+                btn.classList.remove('bg-white', 'text-gray-600', 'border-gray-300');
+            } else {
+                btn.classList.remove('bg-odoo-purple', 'text-white', 'border-odoo-purple');
+                btn.classList.add('bg-white', 'text-gray-600', 'border-gray-300');
+            }
+        });
+    }
+
+    // Modal Logic
+    const modal = document.getElementById('module-modal');
+    const modalBox = document.getElementById('modal-box');
+    const modalModuleName = document.getElementById('modal-module-name');
+
+    function openModule(moduleName) {
+        modalModuleName.textContent = moduleName;
+        modal.classList.remove('hidden');
+        setTimeout(() => {
+            modal.classList.remove('opacity-0');
+            modalBox.classList.remove('scale-95');
+            modalBox.classList.add('scale-100');
+        }, 10);
+    }
+
+    function closeModal() {
+        modal.classList.add('opacity-0');
+        modalBox.classList.remove('scale-100');
+        modalBox.classList.add('scale-95');
+        setTimeout(() => {
+            modal.classList.add('hidden');
+        }, 200);
+    }
+
+    // Close Modal on backdrop click
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            closeModal();
+        }
+    });
+</script>
+</body>
+</html>
