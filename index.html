@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulaire</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #f4f7f6;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+h1{
+    text-align: center;
+    margin-bottom: 15px;
+}
+        
+        form {
+            background-color: #ffffff;
+            padding: 30px 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 450px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Style des étiquettes (Labels) */
+        label {
+            font-weight: 600;
+            margin-bottom: 6px;
+            margin-top: 14px;
+            color: #333333;
+            font-size: 14px;
+        }
+        label:first-of-type {
+            margin-top: 0;
+        }
+        input[type="text"],
+        input[type="tel"],
+        input[type="date"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1.5px solid #cccccc;
+            border-radius: 6px;
+            font-size: 14px;
+            color: #333;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+        input[type="text"]:focus,
+        input[type="tel"]:focus,
+        input[type="date"]:focus {
+            border-color: #4A90E2;
+            box-shadow: 0 0 6px rgba(74, 144, 226, 0.3);
+        }
+        input[type="submit"] {
+            margin-top: 25px;
+            background-color: #4A90E2;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        /* Effet au survol du bouton */
+        input[type="submit"]:hover {
+            background-color: #357ABD;
+        }
+    </style>
+</head>
+<body>
+    <h1>Inscription des stagiaires</h1>
+    <form action="#">
+        <label for="name">Nom du stagiaire</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="phone">Téléphone</label>
+        <input type="tel" id="phone" name="phone">
+
+        <label for="metier">Métier</label>
+        <input type="text" id="metier" name="metier" placeholder="Ex: Développeur">
+
+        <label for="date-debut">Date début</label>
+        <input type="date" id="date-debut" name="date-debut">
+
+        <label for="date-fin">Date fin</label>
+        <input type="date" id="date-fin" name="date-fin">
+        <input type="submit" value="Envoyer">
+    </form>
+</body>
+</html>
